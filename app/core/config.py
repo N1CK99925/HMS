@@ -6,6 +6,7 @@
 
 from pydantic_settings import BaseSettings
 from functools import lru_cache
+from pathlib import Path
 
 
 class Settings(BaseSettings):
@@ -17,10 +18,10 @@ class Settings(BaseSettings):
     POSTGRES_URL: str
 
 
-    REDIS_URL: str
+    REDIS_URL: str = "redis://localhost:6379/0"
 
 
-    RABBITMQ_URL: str
+    RABBITMQ_URL: str = "amqp://guest:guest@localhost:5672/"
 
    
     JWT_SECRET_KEY: str               
@@ -35,8 +36,9 @@ class Settings(BaseSettings):
     OTP_TTL: int = 600                 # 10 m
 
     class Config:
-        env_file = ".env"  
+        env_file = Path(__file__).parent.parent.parent / ".env"
         case_sensitive = True
+        extra = "ignore"
 
 
 # singleton 
