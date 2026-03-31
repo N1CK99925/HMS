@@ -6,6 +6,10 @@ psycopg2-binary
 python-dotenv
 pytest
 motor
-redis
+redis[hiredis]
 asyncpg
 pymongo[srv]
+python-jose[cryptography]
+passlib[bcrypt]
+pydantic-settings
+bcrypt

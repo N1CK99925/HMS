@@ -1,8 +1,4 @@
-# config.py
-# Reads every value from the .env file and makes them available
-# as a typed Python object called `settings`.
-# Any file that needs a secret imports settings from here.
-# Never hardcode secrets directly in code — always use settings.
+
 
 from pydantic_settings import BaseSettings
 from functools import lru_cache
@@ -10,7 +6,7 @@ from pathlib import Path
 
 
 class Settings(BaseSettings):
-
+    DEBUG: bool = True
     MONGO_URL: str
     MONGO_DB_NAME: str = "hms"
 

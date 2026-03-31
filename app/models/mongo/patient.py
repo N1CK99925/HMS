@@ -150,6 +150,12 @@ PATIENT_INDEXES = [
         "unique": True,
         "name": "idx_patient_tenant_mrn_unique"
     },
+    # ID lookup — for direct access by internal ID
+    {
+        "key": [("id", 1), ("tenant_id", 1)],
+        "unique": True,
+        "name": "idx_patient_id_tenant_unique"
+    },
     # Name search — for receptionist lookup
     {
         "key": [("tenant_id", 1), ("last_name", 1), ("first_name", 1)],

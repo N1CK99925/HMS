@@ -1,9 +1,9 @@
-# scripts/mongo_indexes.py
+# app/migrations/mongo_indexes.py
 # Creates all MongoDB indexes defined across all models.
 # Run this ONCE after setting up a fresh MongoDB instance.
 # Safe to run again — MongoDB skips indexes that already exist.
 #
-# Run with: python scripts/mongo_indexes.py
+# Run with: python -m app.migrations.mongo_indexes
 
 import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
