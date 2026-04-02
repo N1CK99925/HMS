@@ -14,7 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.database import connect_mongo, close_mongo, connect_redis, close_redis
-from app.routers import health, auth, patients
+from app.routers import health, auth, patients, encounters, clinical_notes, prescriptions
 from app.middleware.tenant import TenantMiddleware
 
 
@@ -80,4 +80,7 @@ app.add_middleware(TenantMiddleware)
 
 app.include_router(health.router)                              # GET /health
 app.include_router(auth.router,     prefix="/api/v1/auth")    # POST /api/v1/auth/login
-app.include_router(patients.router, prefix="/api/v1")         # GET  /api/v1/patients
+app.include_router(patients.router,       prefix="/api/v1")
+app.include_router(encounters.router,     prefix="/api/v1")
+app.include_router(clinical_notes.router, prefix="/api/v1")
+app.include_router(prescriptions.router,  prefix="/api/v1")
