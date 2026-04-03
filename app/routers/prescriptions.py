@@ -5,7 +5,7 @@
 # If a severe/contraindicated interaction is found, the prescription
 # is blocked entirely. For moderate/mild interactions, the doctor
 # can override with a documented reason — but the flag is always saved.
-#
+
 # This check must complete in under 100ms — it runs on every
 # prescription write and blocks the response until done.
 
