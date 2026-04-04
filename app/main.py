@@ -1,12 +1,6 @@
-# main.py
-# The entry point of the entire application.
-# FastAPI starts here. Think of this as the front door of the building.
-#
-# Run the app with:
+
 #   uvicorn main:app --reload
-#
-# --reload means the server restarts automatically when you save a file.
-# Only use --reload in development, never in production.
+
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
@@ -14,29 +8,20 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.database import connect_mongo, close_mongo, connect_redis, close_redis
-from app.routers import health, auth, patients, encounters, clinical_notes, prescriptions
+from app.routers import health, auth, patients, encounters, clinical_notes, prescriptions, lab_orders, imaging_studies
 from app.middleware.tenant import TenantMiddleware
 
-
-# ── Lifespan ───────────────────────────────────────────────────────────────
-# Lifespan manages what happens when the app STARTS and when it SHUTS DOWN.
-# This is where we open and close database connections.
-#
-# Why here and not inside each route?
-# Because opening a new DB connection on every request is extremely slow.
-# We open ONE connection when the app starts and reuse it for every request.
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # ── Startup ────────────────────────────────────────────────
     print("Starting HMS API...")
-    await connect_mongo()     # Opens MongoDB connection pool
-    await connect_redis()     # Opens Redis connection
-    # PostgreSQL sessions are created per-request via Depends()
-    # so we don't need to connect it here explicitly
+    await connect_mongo()     
+    await connect_redis()   
+
     print("All services connected. HMS API is ready.")
 
-    yield  # The app runs here — everything above is startup, below is shutdown
+    yield  
 
     # ── Shutdown ───────────────────────────────────────────────
     print("Shutting down HMS API...")
@@ -45,7 +30,6 @@ async def lifespan(app: FastAPI):
     print("Connections closed.")
 
 
-# ── App instance ───────────────────────────────────────────────────────────
 app = FastAPI(
     title="HMS SaaS API",
     description="Multi-tenant Hospital Management System",
@@ -57,9 +41,7 @@ app = FastAPI(
 )
 
 
-# ── CORS Middleware ────────────────────────────────────────────────────────
-# CORS controls which websites are allowed to call this API from a browser.
-# In development we allow everything. In production, restrict to your domains.
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"] if settings.DEBUG else ["https://yourhospital.com"],
@@ -74,13 +56,13 @@ app.add_middleware(
 app.add_middleware(TenantMiddleware)
 
 
-# ── Routers ────────────────────────────────────────────────────────────────
-# Each router handles one domain of the API.
-# prefix="/api/v1" means all routes start with /api/v1/...
 
-app.include_router(health.router)                              # GET /health
-app.include_router(auth.router,     prefix="/api/v1/auth")    # POST /api/v1/auth/login
-app.include_router(patients.router,       prefix="/api/v1")
-app.include_router(encounters.router,     prefix="/api/v1")
-app.include_router(clinical_notes.router, prefix="/api/v1")
-app.include_router(prescriptions.router,  prefix="/api/v1")
+
+app.include_router(health.router)                         
+app.include_router(auth.router,     prefix="/api/v1/auth")    
+app.include_router(patients.router,         prefix="/api/v1")
+app.include_router(encounters.router,       prefix="/api/v1")
+app.include_router(clinical_notes.router,   prefix="/api/v1")
+app.include_router(prescriptions.router,    prefix="/api/v1")
+app.include_router(lab_orders.router,       prefix="/api/v1")
+app.include_router(imaging_studies.router,  prefix="/api/v1")
